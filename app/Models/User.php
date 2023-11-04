@@ -15,6 +15,10 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public static int $ADMIN = 1;
+    public static int $SUPERVISOR = 1;
+    public static int $STUDENT = 1;
+
     protected $fillable = [
         'role_id',
         'name',
