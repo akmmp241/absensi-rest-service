@@ -19,14 +19,14 @@ class StudentSeeder extends Seeder
         $user = User::query()->create([
             'role_id' => User::$STUDENT,
             'username' => 'test',
-            'password' => Hash::make("test12345"),
+            'password' => "test",
             'name' => 'test',
         ]);
 
         $user2 = User::query()->create([
             "role_id" => User::$SUPERVISOR,
             'username' => 'test2',
-            'password' => Hash::make("test12345"),
+            'password' => "test",
             'name' => 'test2',
         ]);
 
