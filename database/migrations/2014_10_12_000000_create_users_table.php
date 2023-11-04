@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('role_id')->nullable(false);
             $table->string('name')->nullable(false);
-            $table->timestamp('username')->nullable(false)->unique();
+            $table->string('username')->nullable(false)->unique();
             $table->string('password')->nullable(false);
             $table->timestamps();
         });
