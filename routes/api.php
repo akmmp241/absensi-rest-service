@@ -17,4 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/users')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->middleware('guest:api');
+    Route::get('/', [AuthController::class, 'get'])->middleware('auth:api');
+    Route::delete('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 });

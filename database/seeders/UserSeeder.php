@@ -16,5 +16,12 @@ class UserSeeder extends Seeder
             'password' => Hash::make("test"),
             'name' => 'test'
         ]);
+
+        User::query()->create([
+            'role_id' => User::$SUPERVISOR,
+            'username' => 'test2',
+            'password' => Hash::make("test"),
+            'name' => 'test2'
+        ]);
     }
 }
