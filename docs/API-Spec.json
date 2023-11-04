@@ -1,0 +1,541 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "API Sistem Laporan Absensi",
+        "description": "API Sistem Laporan Absensi",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost"
+        }
+    ],
+    "tags": [
+        {
+            "description": "API for Authentication",
+            "name": "Authentication"
+        },
+        {
+            "description": "API for Activity",
+            "name": "Activity"
+        }
+    ],
+    "paths": {
+        "/api/users/login": {
+            "description": "Login User",
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login User",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "description": "username for student is their nis",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "login-student-10005": {
+                                    "description": "Login student with nis 10005",
+                                    "value": {
+                                        "data": {
+                                            "username": "10005",
+                                            "password": "10005"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "token_type": {
+                                                    "type": "string"
+                                                },
+                                                "expires_id": {
+                                                    "type": "integer"
+                                                },
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "role_id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "username": {
+                                                            "type": "string"
+                                                        },
+                                                        "createdAt": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        },
+                                                        "updatedAt": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "login-student-10005": {
+                                        "description": "Login student with nis 10005",
+                                        "value": {
+                                            "data": {
+                                                "success": true,
+                                                "message": "Login success",
+                                                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+                                                "token_type": "Bearer",
+                                                "expires_in": 3600,
+                                                "user": {
+                                                    "id": 1,
+                                                    "role_id": 1,
+                                                    "name": "Akmal Muhammad Pridianto",
+                                                    "username": "10005",
+                                                    "createdAt": "2023-11-4 00:00:00",
+                                                    "updatedAt": "2023-11-4 00:00:00"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed validation and bad request from client",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "field_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "error-blank": {
+                                        "description": "Error blank username and password",
+                                        "value": {
+                                            "errors": {
+                                                "username": [
+                                                    "The username field is required."
+                                                ],
+                                                "password": [
+                                                    "The password field is required."
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "error-credentials": {
+                                        "description": "Username and Password not match",
+                                        "value": {
+                                            "data": {
+                                                "success": false,
+                                                "message": "Username or Password is incorrect"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "description": "Get current User",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "examples": {
+                            "Authorization": {
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success get current user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "user": {
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "user-student": {
+                                        "description": "Get current user if user is student",
+                                        "value": {
+                                            "data": {
+                                                "success": true,
+                                                "user": {
+                                                    "id": 1,
+                                                    "user_id": 1,
+                                                    "nis": 10005,
+                                                    "name": "Akmal Muhammad Pridianto",
+                                                    "class": "XI PPLG 2",
+                                                    "createdAt": "2023-11-4 00:00:00",
+                                                    "updatedAt": "2023-11-4 00:00:00",
+                                                    "supervisor": {
+                                                        "id": 1,
+                                                        "user_id": 2,
+                                                        "name": "Agung Setiawan",
+                                                        "nip": "123456789",
+                                                        "createdAt": "2023-11-4 00:00:00",
+                                                        "updatedAt": "2023-11-4 00:00:00"
+                                                    },
+                                                    "dudi": {
+                                                        "id": 1,
+                                                        "name": "PT. Dinustek",
+                                                        "createdAt": "2023-11-4 00:00:00",
+                                                        "updatedAt": "2023-11-4 00:00:00"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "user-supervisor": {
+                                        "description": "Get current user if user is supervisor",
+                                        "value": {
+                                            "data": {
+                                                "success": true,
+                                                "user": {
+                                                    "id": 2,
+                                                    "user_id": 2,
+                                                    "name": "Agung Setiawan",
+                                                    "nip": "123456789",
+                                                    "createdAt": "2023-11-4 00:00:00",
+                                                    "updatedAt": "2023-11-4 00:00:00"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/logout": {
+            "delete": {
+                "tags": [
+                    "Authentication"
+                ],
+                "description": "Logout User",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "examples": {
+                            "Authorization": {
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success logout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "description": "Success logout",
+                                        "value": {
+                                            "data": {
+                                                "success": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "unauthorized": {
+                                        "description": "Username and Password not match",
+                                        "value": {
+                                            "data": {
+                                                "success": false,
+                                                "message": "You're not logged in"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/students/{id}/activities": {
+            "post": {
+                "description": "Add new activity for specific student",
+                "tags": [
+                    "Activity"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "examples": {
+                            "Authorization": {
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                            }
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "student_id": {
+                                        "type": "integer"
+                                    },
+                                    "dudi_id": {
+                                        "type": "integer"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "masuk",
+                                            "keluar"
+                                        ]
+                                    },
+                                    "detail": {
+                                        "type": "string"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "image": {
+                                        "type": "file"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success add new activity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "description": "Success add new activity",
+                                        "value": {
+                                            "data": {
+                                                "success": true,
+                                                "message": "Success add new activity"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed validation and bad request from client",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "field_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "error-blank": {
+                                        "description": "Error blank detail",
+                                        "value": {
+                                            "errors": {
+                                                "detail": [
+                                                    "The detail field is required."
+                                                ],
+                                                "image": [
+                                                    "Max size 1mb",
+                                                    "file type must be jpeg, jpg, png"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "description": "Get all activity for specific student",
+                "tags": [
+                    "Activity"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                    }
+                ],
+                responses: {
+                    "200": {}
+                }
+            }
+        }
+    }
+}

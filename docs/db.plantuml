@@ -1,0 +1,87 @@
+@startuml
+
+entity users {
+    *id : int <<PK>>
+    *role_id: int
+    --
+    *name : string
+    *username : string
+    *password : string
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity dudis {
+    *id : int <<PK>>
+    --
+    *name : string
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity supervisors {
+    *id : int <<PK>>
+    *user_id : int <<FK>>
+    --
+    *name : string
+    *nip : string
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity students {
+   *id : int <<PK>>
+   *user_id : int <<FK>>
+   *supervisor_id : int <<FK>>
+   *dudi_id : int <<FK>>
+   --
+   *nis: string
+   *name : string
+   *class : string
+   *created_at : timestamp
+   *updated_at : timestamp
+}
+
+entity reports {
+    *id : int <<PK>>
+    *dudi_id : int <<FK>>
+    *student_id : int <<FK>>
+    --
+    *type : string
+    *date : date
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity tasks {
+    *id : int <<PK>>
+    *report_id : int <<FK>>
+    --
+    *image : string
+    *detail : string
+    *is_confirm : boolean
+    *confirm_by : int <<FK>>
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity notifications {
+    *id : int <<PK>>
+    *user_id : int <<FK>>
+    --
+    *title : string
+    *detail : string
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+users ||-|{ students
+users ||-|{ supervisors
+users ||-|{ notifications
+supervisors ||-o{ students
+students ||-o{ reports
+dudis ||-o{ students
+dudis ||-o{ reports
+reports ||-o{ tasks
+
+@enduml
