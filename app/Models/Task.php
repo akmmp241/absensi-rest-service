@@ -23,9 +23,9 @@ class Task extends Model
     ];
 
     protected $casts = [
-        'confirmed_at' => 'datetime:Y-m-d H:m:s',
-        'created_at' => 'datetime:Y-m-d H:m:s',
-        'updated_at' => 'datetime:Y-m-d H:m:s',
+        'confirmed_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function report(): BelongsTo

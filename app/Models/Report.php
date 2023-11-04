@@ -21,9 +21,9 @@ class Report extends Model
     ];
 
     protected $casts = [
-        'date' => 'datetime:Y-m-d',
-        'created_at' => 'datetime:Y-m-d H:m:s',
-        'updated_at' => 'datetime:Y-m-d H:m:s',
+        'date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function student(): BelongsTo

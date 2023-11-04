@@ -16,8 +16,8 @@ class User extends Authenticatable implements JWTSubject
     use HasApiTokens, HasFactory, Notifiable;
 
     public static int $ADMIN = 1;
-    public static int $SUPERVISOR = 1;
-    public static int $STUDENT = 1;
+    public static int $SUPERVISOR = 2;
+    public static int $STUDENT = 3;
 
     protected $fillable = [
         'role_id',
@@ -31,8 +31,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:m:s',
-        'updated_at' => 'datetime:Y-m-d H:m:s',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'password' => 'hashed',
     ];
 

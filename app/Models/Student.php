@@ -23,8 +23,8 @@ class Student extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:m:s',
-        'updated_at' => 'datetime:Y-m-d H:m:s',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -37,7 +37,7 @@ class Student extends Model
         return $this->belongsTo(Dudi::class, 'dudi_id', 'id');
     }
 
-    public function supervisors(): BelongsTo
+    public function supervisor(): BelongsTo
     {
         return $this->belongsTo(Supervisor::class, 'supervisor_id', 'id');
     }
