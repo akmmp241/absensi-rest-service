@@ -9,6 +9,7 @@ use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivityController extends Controller
@@ -18,7 +19,7 @@ class ActivityController extends Controller
         $data = $request->validated();
 
         $data['date'] = $data['date'] . ' ' . now()->format('H:i:s');
-        $data['image'] = $request->file('image')->store('images');
+        $data['image'] = $request->file('image')->store('public/images');
 
         try {
             DB::beginTransaction();
@@ -30,6 +31,7 @@ class ActivityController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error($e->getMessage());
             return response()->json([
                 "data" => [
                     "success" => false,

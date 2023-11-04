@@ -38,6 +38,24 @@ class AddActivityRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            "type.in" => "Type must be masuk or keluar",
+            "image.max" => "Image size must be less than 1MB"
+        ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new HttpResponseException(response()->json([
+            "data" => [
+                "success" => false,
+                "message" => "This action can only done by student"
+            ]
+        ], Response::HTTP_UNAUTHORIZED));
+    }
+
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
