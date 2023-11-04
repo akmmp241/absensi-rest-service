@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('report_id')->constrained('reports')->nullable(false);
             $table->string('image')->nullable(false);
             $table->text('detail')->nullable(false);
-            $table->string('status', ['not confirmed', 'confirm'])->nullable(false)->default('not confirmed');
+            $table->enum('status', ['not confirmed', 'confirm'])->nullable(false)->default('not confirmed');
             $table->foreignId('confirmed_by')->constrained('supervisors')->nullable(true);
+            $table->timestamp('confirmed_at')->nullable(false);
             $table->timestamps();
         });
     }
