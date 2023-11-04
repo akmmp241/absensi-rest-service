@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('image')->nullable(false);
             $table->text('detail')->nullable(false);
             $table->enum('status', ['not confirmed', 'confirm'])->nullable(false)->default('not confirmed');
-            $table->foreignId('confirmed_by')->constrained('supervisors')->nullable(true);
-            $table->timestamp('confirmed_at')->nullable(false);
+            $table->foreignId('confirmed_by')->constrained('supervisors')->nullable();
+            $table->timestamp('confirmed_at')->nullable();
             $table->timestamps();
         });
     }
