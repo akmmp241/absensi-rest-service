@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\Activity\ActivityController;
 use App\Http\Controllers\API\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('/users')->group(function () {
-    Route::post('/login', [AuthController::class, 'login'])->middleware('guest:api');
+    Route::post('/', [AuthController::class, 'login'])->middleware('guest:api');
     Route::get('/', [AuthController::class, 'get'])->middleware('auth:api');
-    Route::delete('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
+    Route::delete('/', [AuthController::class, 'logout'])->middleware('auth:api');
+});
+
+Route::middleware('auth:api')->prefix('/students')->group(function () {
+    Route::post('/activities', [ActivityController::class, 'create']);
 });
