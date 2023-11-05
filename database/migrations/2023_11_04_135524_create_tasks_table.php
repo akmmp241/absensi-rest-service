@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('report_id')->constrained('reports')->nullable(false);
+            $table->enum('type', ['masuk', 'keluar'])->nullable(false);
             $table->string('image')->nullable(false);
             $table->text('detail')->nullable(false);
             $table->enum('status', ['not confirmed', 'confirm'])->nullable(false)->default('not confirmed');

@@ -47,7 +47,6 @@ entity reports {
     *dudi_id : int <<FK>>
     *student_id : int <<FK>>
     --
-    *type : string
     *date : date
     *created_at : timestamp
     *updated_at : timestamp
@@ -57,6 +56,7 @@ entity tasks {
     *id : int <<PK>>
     *report_id : int <<FK>>
     --
+    *type : string
     *image : string
     *detail : string
     *is_confirm : boolean

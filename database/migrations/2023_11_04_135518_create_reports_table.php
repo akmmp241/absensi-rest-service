@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->nullable(false);
             $table->foreignId('dudi_id')->constrained('dudis')->nullable(false);
-            $table->enum('type', ['masuk', 'keluar'])->nullable(false);
             $table->timestamp('date')->nullable(false);
             $table->timestamps();
         });
