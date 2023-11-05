@@ -16,7 +16,6 @@ class Report extends Model
     protected $fillable = [
         'student_id',
         'dudi_id',
-        'type',
         'date',
     ];
 

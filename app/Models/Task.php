@@ -16,6 +16,7 @@ class Task extends Model
         'report_id',
         'confirmed_by',
         'confirmed_at',
+        'type',
         'title',
         'detail',
         'image',
@@ -34,6 +35,11 @@ class Task extends Model
     }
 
     public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(Supervisor::class, 'confirmed_by', 'id');
+    }
+
+    public function confirmedBy(): BelongsTo
     {
         return $this->belongsTo(Supervisor::class, 'confirmed_by', 'id');
     }

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\API\Activity;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Activity\AddActivityRequest;
+use App\Http\Resources\ReportsCollection;
 use App\Models\Report;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,8 +47,31 @@ class ActivityController extends Controller
         return response()->json([
             "data" => [
                 "success" => true,
-                "message" => "Success to insert data"
+                "message" => "Success add new Activity"
             ]
         ], Response::HTTP_CREATED);
+    }
+
+    public function all(): JsonResponse
+    {
+        if (Auth::user()->role_id !== User::$STUDENT) {
+            throw new HttpResponseException(response()->json([
+                "data" => [
+                    "success" => false,
+                    "message" => "This action only can be done by student"
+                ]
+            ]));
+        }
+
+        $reports = Report::with(['tasks', 'student', 'dudi'])
+            ->where('student_id', Auth::id())->get();
+
+        return response()->json([
+            "data" => [
+                "success" => true,
+                "message" => "Success to get data",
+                "reports" => new ReportsCollection($reports)
+            ]
+        ], Response::HTTP_OK);
     }
 }

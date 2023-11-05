@@ -23,4 +23,5 @@ Route::prefix('/users')->group(function () {
 
 Route::middleware('auth:api')->prefix('/students')->group(function () {
     Route::post('/activities', [ActivityController::class, 'create']);
+    Route::get('/activities', [ActivityController::class, 'all']);
 });

@@ -21,8 +21,7 @@
         }
     ],
     "paths": {
-        "/api/users/login": {
-            "description": "Login User",
+        "/api/users": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -214,9 +213,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/users": {
+            },
             "get": {
                 "tags": [
                     "Authentication"
@@ -226,6 +223,14 @@
                     {
                         "name": "Authorization",
                         "in": "header",
+                        "schema": {
+                            "type": "string",
+                            "properties": {
+                                "Authorization": {
+                                    "type": "string",
+                                }
+                            }
+                        },
                         "examples": {
                             "Authorization": {
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
@@ -305,11 +310,43 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "unauthorized": {
+                                        "description": "User not logged in",
+                                        "value": {
+                                            "data": {
+                                                "success": false,
+                                                "message": "You are not logged in."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        },
-        "/api/user/logout": {
+            },
             "delete": {
                 "tags": [
                     "Authentication"
@@ -319,6 +356,14 @@
                     {
                         "name": "Authorization",
                         "in": "header",
+                        "schema": {
+                            "type": "string",
+                            "properties": {
+                                "Authorization": {
+                                    "type": "string",
+                                }
+                            }
+                        },
                         "examples": {
                             "Authorization": {
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
@@ -394,7 +439,7 @@
                 }
             }
         },
-        "/api/students/{id}/activities": {
+        "/api/students/activities": {
             "post": {
                 "description": "Add new activity for specific student",
                 "tags": [
@@ -404,6 +449,14 @@
                     {
                         "name": "Authorization",
                         "in": "header",
+                        "schema": {
+                            "type": "string",
+                            "properties": {
+                                "Authorization": {
+                                    "type": "string",
+                                }
+                            }
+                        },
                         "examples": {
                             "Authorization": {
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
@@ -438,7 +491,7 @@
                                         "format": "date"
                                     },
                                     "image": {
-                                        "type": "file"
+                                        "type": "string"
                                     }
                                 }
                             }
@@ -518,6 +571,49 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "unauthorized": {
+                                        "description": "User role is not student",
+                                        "value": {
+                                            "data": {
+                                                "success": false,
+                                                "message": "This action only can be done by student"
+                                            }
+                                        }
+                                    },
+                                    "unauthenticated": {
+                                        "description": "User not logged in",
+                                        "value": {
+                                            "data": {
+                                                "success": false,
+                                                "message": "You are not logged in."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -530,10 +626,197 @@
                     {
                         "name": "Authorization",
                         "in": "header",
+                        "schema": {
+                            "type": "string",
+                            "properties": {
+                                "Authorization": {
+                                    "type": "string",
+                                }
+                            }
+                        },
+                        "examples": {
+                            "Authorization": {
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                            }
+                        }
                     }
                 ],
-                responses: {
-                    "200": {}
+                "responses": {
+                    "200": {
+                        "description": "Success get all activity for specific student",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                },
+                                                "reports": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "student_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "dudi_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "date": {
+                                                                "type": "string",
+                                                                "format": "date"
+                                                            },
+                                                            "createdAt": {
+                                                                "type": "string",
+                                                                "format": "date-time"
+                                                            },
+                                                            "updatedAt": {
+                                                                "type": "string",
+                                                                "format": "date-time"
+                                                            },
+                                                            "tasks": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "id": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "report_id": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "type": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "image": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "detail": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "status": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "confirmed_by": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "confirmed_at": {
+                                                                            "type": "string",
+                                                                            "format": "date-time"
+                                                                        },
+                                                                        "createdAt": {
+                                                                            "type": "string",
+                                                                            "format": "date-time"
+                                                                        },
+                                                                        "updatedAt": {
+                                                                            "type": "string",
+                                                                            "format": "date-time"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success get activities": {
+                                        "description": "Success get all activity for specific student",
+                                        "value": {
+                                            "data": {
+                                                "success": true,
+                                                "message": "Success get activities",
+                                                "reports": [
+                                                    {
+                                                        "id": 1,
+                                                        "student": {
+                                                            "id": 1,
+                                                            "user_id": 1,
+                                                            "nis": 10005,
+                                                            "name": "Akmal Muhammad Pridianto",
+                                                            "class": "XI PPLG 2",
+                                                            "createdAt": "2023-11-4 00:00:00",
+                                                            "updatedAt": "2023-11-4 00:00:00"
+                                                        },
+                                                        "dudi": {
+                                                            "id": 1,
+                                                            "name": "PT. Dinustek",
+                                                            "createdAt": "2023-11-4 00:00:00",
+                                                            "updatedAt": "2023-11-4 00:00:00"
+                                                        },
+                                                        "date": "2021-01-01",
+                                                        "createdAt": "2023-11-4 00:00:00",
+                                                        "updatedAt": "2023-11-4 00:00:00",
+                                                        "tasks": [
+                                                            {
+                                                                "id": 1,
+                                                                "report_id": 1,
+                                                                "type": "masuk",
+                                                                "image": "http://localhost:8000/images/activities/xxx.jpg",
+                                                                "detail": "Detail task 1",
+                                                                "status": "not confirmed",
+                                                                "confirmed_by": null,
+                                                                "confirmed_at": null,
+                                                                "createdAt": "2023-11-4 00:00:00",
+                                                                "updatedAt": "2023-11-4 00:00:00"
+                                                            },
+                                                            {
+                                                                "id": 2,
+                                                                "report_id": 1,
+                                                                "type": "keluar",
+                                                                "image": "http://localhost:8000/images/activities/xxx2.jpg",
+                                                                "detail": "Detail task 2",
+                                                                "status": "not confirmed",
+                                                                "confirmed_by": null,
+                                                                "confirmed_at": null,
+                                                                "createdAt": "2023-11-4 00:00:00",
+                                                                "updatedAt": "2023-11-4 00:00:00"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "id": 2,
+                                                        "student_id": 1,
+                                                        "dudi_id": 1,
+                                                        "date": "2021-01-01",
+                                                        "createdAt": "2023-11-4 00:00:00",
+                                                        "updatedAt": "2023-11-4 00:00:00",
+                                                        "tasks": [
+                                                            {
+                                                                "id": 3,
+                                                                "report_id": 2,
+                                                                "type": "masuk",
+                                                                "image": "http://localhost:8000/images/activities/xxx3.jpg",
+                                                                "detail": "Detail task 3",
+                                                                "status": "confirmed",
+                                                                "confirmed_by": null,
+                                                                "confirmed_at": null,
+                                                                "createdAt": "2023-11-4 00:00:00",
+                                                                "updatedAt": "2023-11-4 00:00:00"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
