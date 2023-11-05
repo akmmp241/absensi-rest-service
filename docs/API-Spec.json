@@ -223,11 +223,12 @@
                     {
                         "name": "Authorization",
                         "in": "header",
+                        "required": true,
                         "schema": {
                             "type": "string",
                             "properties": {
                                 "Authorization": {
-                                    "type": "string",
+                                    "type": "string"
                                 }
                             }
                         },
@@ -235,7 +236,12 @@
                             "Authorization": {
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
                             }
-                        }
+                        },
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -360,7 +366,7 @@
                             "type": "string",
                             "properties": {
                                 "Authorization": {
-                                    "type": "string",
+                                    "type": "string"
                                 }
                             }
                         },
@@ -369,6 +375,11 @@
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
                             }
                         }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -453,7 +464,7 @@
                             "type": "string",
                             "properties": {
                                 "Authorization": {
-                                    "type": "string",
+                                    "type": "string"
                                 }
                             }
                         },
@@ -462,6 +473,11 @@
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
                             }
                         }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "requestBody": {
@@ -630,7 +646,7 @@
                             "type": "string",
                             "properties": {
                                 "Authorization": {
-                                    "type": "string",
+                                    "type": "string"
                                 }
                             }
                         },
@@ -639,6 +655,11 @@
                                 "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
                             }
                         }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -818,6 +839,15 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
