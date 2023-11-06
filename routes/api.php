@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Activity\ActivityController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Doc\DocumentationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +26,5 @@ Route::middleware('auth:api')->prefix('/students')->group(function () {
     Route::post('/activities', [ActivityController::class, 'create']);
     Route::get('/activities', [ActivityController::class, 'all']);
 });
+
+Route::get('/docs', [DocumentationController::class, 'get'])->name('docs');
