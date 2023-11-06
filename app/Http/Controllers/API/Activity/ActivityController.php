@@ -52,7 +52,7 @@ class ActivityController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    public function all(): JsonResponse
+    public function all(Request $request): JsonResponse
     {
         if (Auth::user()->role_id !== User::$STUDENT) {
             throw new HttpResponseException(response()->json([
@@ -65,6 +65,14 @@ class ActivityController extends Controller
 
         $reports = Report::with(['tasks', 'student', 'dudi'])
             ->where('student_id', Auth::id())->get();
+
+        if ($request->has('status') && in_array($request->status, ["unconfirmed", "confirmed"])) {
+            $reports = $reports->filter(function ($report) use ($request) {
+                return $report->tasks->filter(function ($task) use ($request) {
+                        return $task->status === $request->status;
+                    })->count() > 0;
+            });
+        }
 
         return response()->json([
             "data" => [

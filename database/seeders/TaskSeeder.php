@@ -18,7 +18,7 @@ class TaskSeeder extends Seeder
         $student = \App\Models\Student::query()->first();
         $dudi = \App\Models\Dudi::query()->first();
 
-        Report::factory(10)->create([
+        Report::factory(100)->create([
             "student_id" => $student->id,
             "dudi_id" => $dudi->id,
             "date" => "2021-01-01",
@@ -31,7 +31,7 @@ class TaskSeeder extends Seeder
                 "report_id" => $report->id,
                 "image" => fake()->imageUrl(),
                 "detail" => fake()->text(180),
-                "status" => "not confirmed",
+                "status" => fake()->randomElement(["unconfirmed", "confirmed"]),
             ]);
         });
     }
