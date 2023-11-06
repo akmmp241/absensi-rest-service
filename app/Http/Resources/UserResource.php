@@ -19,8 +19,8 @@ class UserResource extends JsonResource
             "role_id" => $this->role_id,
             "name" => $this->name,
             "username" => $this->username,
-            "createdAt" => $this->created_at,
-            "updatedAt" => $this->updated_at,
+            "createdAt" => $this->created_at->format("Y-m-d H:i:s"),
+            "updatedAt" => $this->updated_at->format("Y-m-d H:i:s"),
         ];
     }
 }

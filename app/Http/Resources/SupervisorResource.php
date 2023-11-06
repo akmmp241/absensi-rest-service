@@ -19,8 +19,8 @@ class SupervisorResource extends JsonResource
             "user_id" => $this->user_id,
             "nip" => $this->nip,
             "name" => $this->name,
-            "createdAt" => $this->created_at,
-            "updatedAt" => $this->updated_at,
+            "createdAt" => $this->created_at->format("Y-m-d H:i:s"),
+            "updatedAt" => $this->updated_at->format("Y-m-d H:i:s"),
         ];
     }
 }

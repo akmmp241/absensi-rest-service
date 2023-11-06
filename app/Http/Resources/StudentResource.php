@@ -20,8 +20,8 @@ class StudentResource extends JsonResource
             "nis" => $this->nis,
             "name" => $this->name,
             "class" => $this->class,
-            "createdAt" => $this->created_at,
-            "updatedAt" => $this->updated_at,
+            "createdAt" => $this->created_at->format("Y-m-d H:i:s"),
+            "updatedAt" => $this->updated_at->format("Y-m-d H:i:s"),
             "supervisor" => new SupervisorResource($this->supervisor),
             "dudi" => new DudiResource($this->dudi),
         ];
