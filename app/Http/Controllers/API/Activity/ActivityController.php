@@ -63,8 +63,11 @@ class ActivityController extends Controller
             ]));
         }
 
-        $reports = Report::with(['tasks', 'student', 'dudi'])
-            ->where('student_id', Auth::id())->get();
+        $reports = Report::query()->with(['tasks', 'student', 'dudi'])
+            ->where('student_id', Auth::id());
+
+        $reports = $request->has('recent') && $request->get('recent') === "true"
+            ? $reports->recent()->get() : $reports->get();
 
         if ($request->has('status') && in_array($request->status, ["unconfirmed", "confirmed"])) {
             $reports = $reports->filter(function ($report) use ($request) {

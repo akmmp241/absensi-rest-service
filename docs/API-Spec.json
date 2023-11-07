@@ -678,6 +678,24 @@
                                 "value": "confirmed"
                             }
                         }
+                    },
+                    {
+                        "name": "recent",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "properties": {
+                                "recent": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "recent": {
+                                "value": true
+                            }
+                        }
                     }
                 ],
                 "security": [
