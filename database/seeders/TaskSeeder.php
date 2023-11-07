@@ -15,14 +15,7 @@ class TaskSeeder extends Seeder
     {
         $this->call([StudentSeeder::class]);
 
-        $student = \App\Models\Student::query()->first();
-        $dudi = \App\Models\Dudi::query()->first();
-
-        Report::factory(100)->create([
-            "student_id" => $student->id,
-            "dudi_id" => $dudi->id,
-            "date" => fake()->date(),
-        ]);
+        Report::factory(100)->create();
 
         $reports = Report::query()->get();
 
