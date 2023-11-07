@@ -16,8 +16,13 @@ class ReportFactory extends Factory
      */
     public function definition(): array
     {
+        $student = \App\Models\Student::query()->first();
+        $dudi = \App\Models\Dudi::query()->first();
+
         return [
-            //
+            "student_id" => $student->id,
+            "dudi_id" => $dudi->id,
+            "date" => fake()->date(),
         ];
     }
 }
