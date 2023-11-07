@@ -21,7 +21,7 @@ class TaskSeeder extends Seeder
         Report::factory(100)->create([
             "student_id" => $student->id,
             "dudi_id" => $dudi->id,
-            "date" => "2021-01-01",
+            "date" => fake()->date(),
         ]);
 
         $reports = Report::query()->get();
