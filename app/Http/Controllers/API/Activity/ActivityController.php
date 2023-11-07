@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Activity;
 
+use App\Exceptions\FailedFoundReportException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Activity\AddActivityRequest;
 use App\Http\Resources\ReportsCollection;
@@ -22,20 +23,41 @@ class ActivityController extends Controller
     {
         $data = $request->validated();
 
-        $data['date'] = $data['date'] . ' ' . now()->format('H:i:s');
         $data['image'] = $request->file('image')->store('images');
 
         try {
-            DB::beginTransaction();
-            $report = new Report($data);
-            $report->save();
+            if ($data['type'] === "masuk") {
+                DB::beginTransaction();
+                $report = new Report($data);
+                $report->save();
 
-            $task = new Task($data);
-            $report->tasks()->save($task);
-            DB::commit();
+                $task = new Task($data);
+                $report->tasks()->save($task);
+                DB::commit();
+            } else {
+                try {
+                    DB::beginTransaction();
+                    $report = Report::query()->whereDate('date', $data['date'])
+                        ->where('student_id', $data['student_id'])
+                        ->firstOrFail();
+
+                    $task = new Task($data);
+                    $report->tasks()->save($task);
+                    DB::commit();
+                } catch (\Exception $exception) {
+                    DB::rollBack();
+                    throw new FailedFoundReportException();
+                }
+            }
+        } catch (FailedFoundReportException $exception) {
+            throw new HttpResponseException(response()->json([
+                "data" => [
+                    "success" => false,
+                    "message" => "Anda belum melakukan absensi masuk"
+                ]
+            ], Response::HTTP_NOT_FOUND));
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage());
             return response()->json([
                 "data" => [
                     "success" => false,

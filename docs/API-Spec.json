@@ -630,6 +630,40 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Failed to add activity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "failed to add activity": {
+                                        "description": "Failed to add activity 'keluar' before 'masuk'",
+                                        "value": {
+                                            "data": {
+                                                "success": false,
+                                                "message": "Anda belum melakukan absensi masuk"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
