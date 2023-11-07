@@ -23,7 +23,7 @@ class ActivityController extends Controller
         $data = $request->validated();
 
         $data['date'] = $data['date'] . ' ' . now()->format('H:i:s');
-        $data['image'] = $request->file('image')->store('public/images');
+        $data['image'] = $request->file('image')->store('images');
 
         try {
             DB::beginTransaction();
