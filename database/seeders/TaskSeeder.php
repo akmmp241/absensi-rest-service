@@ -27,11 +27,17 @@ class TaskSeeder extends Seeder
         $reports = Report::query()->get();
 
         $reports->map(function ($report) {
-            Task::factory(2)->create([
+            Task::factory()->create([
                 "report_id" => $report->id,
+                "type" => "masuk",
                 "image" => fake()->imageUrl(),
                 "detail" => fake()->text(180),
-                "status" => fake()->randomElement(["unconfirmed", "confirmed"]),
+            ]);
+            Task::factory()->create([
+                "report_id" => $report->id,
+                "type" => "keluar",
+                "image" => fake()->imageUrl(),
+                "detail" => fake()->text(180),
             ]);
         });
     }
