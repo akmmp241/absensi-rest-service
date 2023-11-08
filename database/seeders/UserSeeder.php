@@ -10,18 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::query()->create([
-            'role_id' => User::$STUDENT,
-            'username' => 'test',
-            'password' => Hash::make("test"),
-            'name' => 'test'
-        ]);
-
-        User::query()->create([
-            'role_id' => User::$SUPERVISOR,
-            'username' => 'test2',
-            'password' => Hash::make("test"),
-            'name' => 'test2'
-        ]);
+        //
     }
 }

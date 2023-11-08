@@ -13,32 +13,6 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([StudentSeeder::class]);
-
-        $student = \App\Models\Student::query()->first();
-        $dudi = \App\Models\Dudi::query()->first();
-
-        Report::factory(100)->create([
-            "student_id" => $student->id,
-            "dudi_id" => $dudi->id,
-            "date" => "2021-01-01",
-        ]);
-
-        $reports = Report::query()->get();
-
-        $reports->map(function ($report) {
-            Task::factory()->create([
-                "report_id" => $report->id,
-                "type" => "masuk",
-                "image" => fake()->imageUrl(),
-                "detail" => fake()->text(180),
-            ]);
-            Task::factory()->create([
-                "report_id" => $report->id,
-                "type" => "keluar",
-                "image" => fake()->imageUrl(),
-                "detail" => fake()->text(180),
-            ]);
-        });
+        //
     }
 }
