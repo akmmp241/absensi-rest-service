@@ -9,6 +9,9 @@ use App\Http\Resources\ReportsCollection;
 use App\Models\Report;
 use App\Models\Task;
 use App\Models\User;
+use App\Services\Activity\ActivityService;
+use App\Services\Response\ResponseService;
+use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,51 +22,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ActivityController extends Controller
 {
+    public function __construct(
+        protected ActivityService $activityService,
+        protected ResponseService $responseService
+    ) {}
+
     public function create(AddActivityRequest $request): JsonResponse
     {
         $data = $request->validated();
-
-        $data['image'] = $request->file('image')->store('images');
+        $data['image'] = $this->activityService->storeImage($request->file('image'));
 
         try {
-
-            $report = Report::query()->whereDate('date', $data['date'])
-                ->where('student_id', $data['student_id'])
-                ->first();
-
-            if (!$report) {
-                if ($data['type'] === "masuk") {
-                    try {
-                        DB::beginTransaction();
-                        $report = new Report($data);
-                        $report->save();
-
-                        $task = new Task($data);
-                        $report->tasks()->save($task);
-                        DB::commit();
-                    } catch (\Exception $exception) {
-                        DB::rollBack();
-                    }
-                } else {
-                    throw new FailedCreateActivityException('Anda belum melakukan absensi masuk', Response::HTTP_NOT_FOUND);
-                }
-            } else {
-                if ($data['type'] === "masuk") {
-                    throw new FailedCreateActivityException('Anda sudah melakukan absensi masuk', Response::HTTP_EXPECTATION_FAILED);
-                } else {
-                    if ($report->tasks->count() === 2) {
-                        throw new FailedCreateActivityException('Anda sudah melakukan absensi keluar', Response::HTTP_EXPECTATION_FAILED);
-                    }
-                    try {
-                        DB::beginTransaction();
-                        $task = new Task($data);
-                        $report->tasks()->save($task);
-                        DB::commit();
-                    } catch (\Exception $exception) {
-                        DB::rollBack();
-                    }
-                }
-            }
+            $this->activityService->createNewActivity($data);
         } catch (FailedCreateActivityException $exception) {
             throw new HttpResponseException(response()->json([
                 "data" => [
@@ -100,18 +70,12 @@ class ActivityController extends Controller
             ]));
         }
 
-        $reports = Report::query()->with(['tasks', 'student', 'dudi'])
-            ->where('student_id', Auth::id());
+        $isRecent = $request->has('recent') && $request->get('recent') == true;
 
-        $reports = $request->has('recent') && $request->get('recent') === "true"
-            ? $reports->recent()->get() : $reports->get();
+        $reports = $this->activityService->getAllActivity($isRecent);
 
         if ($request->has('status') && in_array($request->status, ["unconfirmed", "confirmed"])) {
-            $reports = $reports->filter(function ($report) use ($request) {
-                return $report->tasks->filter(function ($task) use ($request) {
-                        return $task->status === $request->status;
-                    })->count() > 0;
-            });
+            $reports = $this->activityService->filterActivityByStatus($reports, $request->status);
         }
 
         return response()->json([
