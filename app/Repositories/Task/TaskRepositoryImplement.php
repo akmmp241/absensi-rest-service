@@ -13,7 +13,7 @@ class TaskRepositoryImplement implements TaskRepository
         protected Task $model
     ) {}
 
-    public function create(array $data, ?Report $report): void
+    public function create(array $data, Report $report): void
     {
         $task = new $this->model($data);
         $report->tasks()->save($task);

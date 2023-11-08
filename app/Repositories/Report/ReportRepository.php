@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface ReportRepository
 {
-    public function getByDate(string $date, int $student_id): Report|Model;
+    public function getByDate(string $date, int $student_id): Report|Model|null;
 
     public function create(array $data): Report;
 

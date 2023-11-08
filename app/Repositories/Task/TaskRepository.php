@@ -6,5 +6,5 @@ use App\Models\Report;
 
 interface TaskRepository
 {
-    public function create(array $data, ?Report $report): void;
+    public function create(array $data, Report $report): void;
 }

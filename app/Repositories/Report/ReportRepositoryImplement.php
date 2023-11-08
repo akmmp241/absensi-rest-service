@@ -13,7 +13,7 @@ class ReportRepositoryImplement implements ReportRepository
         protected Report $model
     ) {}
 
-    public function getByDate(string $date, int $student_id): Report|Model
+    public function getByDate(string $date, int $student_id): Report|Model|null
     {
         return $this->model::query()->whereDate('date', $date)
             ->where('student_id', $student_id)
@@ -31,7 +31,7 @@ class ReportRepositoryImplement implements ReportRepository
     public function all(bool $recent): Collection
     {
         $reports = $this->model::query()->with(['tasks', 'student', 'dudi'])
-            ->where('student_id', Auth::id());
+            ->where('student_id', Auth::user()->student->id);
 
         return $recent ? $reports->recent()->get() : $reports->get();
     }

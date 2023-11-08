@@ -6,18 +6,13 @@ use App\Exceptions\FailedCreateActivityException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Activity\AddActivityRequest;
 use App\Http\Resources\ReportsCollection;
-use App\Models\Report;
-use App\Models\Task;
 use App\Models\User;
 use App\Services\Activity\ActivityService;
 use App\Services\Response\ResponseService;
-use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivityController extends Controller
@@ -42,7 +37,6 @@ class ActivityController extends Controller
                 ]
             ], $exception->getCode()));
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new HttpResponseException(response()->json([
                 "data" => [
                     "success" => false,

@@ -7,7 +7,6 @@ use App\Repositories\Report\ReportRepository;
 use App\Repositories\Task\TaskRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use LaravelEasyRepository\Service;
@@ -28,18 +27,19 @@ class ActivityServiceImplement extends Service implements ActivityService
         $report = $this->reportRepository->getByDate($data['date'], $data['student_id']);
 
         if (!$report) {
-            if (!$data['type'] === "masuk") {
+            if ($data['type'] === "keluar") {
                 throw new FailedCreateActivityException('Anda belum melakukan absensi masuk', Response::HTTP_NOT_FOUND);
+            } else {
+                $this->createActivity($data, false);
+                return;
             }
-
-            $this->createActivity($data, false);
         }
 
         if ($data['type'] === "masuk") {
             throw new FailedCreateActivityException('Anda sudah melakukan absensi masuk', Response::HTTP_EXPECTATION_FAILED);
         }
 
-        if ($report->tasks->count() >= 2) {
+        if ($report->tasks()->count() >= 2) {
             throw new FailedCreateActivityException('Anda sudah melakukan absensi keluar', Response::HTTP_EXPECTATION_FAILED);
         }
 
@@ -73,16 +73,6 @@ class ActivityServiceImplement extends Service implements ActivityService
     public function storeImage(UploadedFile $file): bool|string
     {
         return $file->store('images');
-    }
-
-    public function failedResponse(FailedCreateActivityException $exception): void
-    {
-        throw new HttpResponseException(response()->json([
-            "data" => [
-                "success" => false,
-                "message" => $exception->getMessage()
-            ]
-        ], $exception->getCode()));
     }
 
     public function filterActivityByStatus($reports, $status): Collection
