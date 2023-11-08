@@ -45,12 +45,15 @@ class ActivityController extends Controller
                         DB::rollBack();
                     }
                 } else {
-                    throw new FailedCreateActivityException('Anda belum melakukan absensi masuk');
+                    throw new FailedCreateActivityException('Anda belum melakukan absensi masuk', Response::HTTP_NOT_FOUND);
                 }
             } else {
                 if ($data['type'] === "masuk") {
-                    throw new FailedCreateActivityException('Anda sudah melakukan absensi masuk');
+                    throw new FailedCreateActivityException('Anda sudah melakukan absensi masuk', Response::HTTP_EXPECTATION_FAILED);
                 } else {
+                    if ($report->tasks->count() === 2) {
+                        throw new FailedCreateActivityException('Anda sudah melakukan absensi keluar', Response::HTTP_EXPECTATION_FAILED);
+                    }
                     try {
                         DB::beginTransaction();
                         $task = new Task($data);
@@ -67,7 +70,7 @@ class ActivityController extends Controller
                     "success" => false,
                     "message" => $exception->getMessage()
                 ]
-            ], Response::HTTP_NOT_FOUND));
+            ], $exception->getCode()));
         } catch (\Exception $e) {
             DB::rollBack();
             throw new HttpResponseException(response()->json([
