@@ -41,7 +41,7 @@ class AddActivityRequest extends FormRequest
     public function messages(): array
     {
         return [
-            "type.in" => "Type must be masuk or keluar",
+            "type" => "Type must be masuk or keluar",
             "image.max" => "Image size must be less than 1MB"
         ];
     }
@@ -59,7 +59,10 @@ class AddActivityRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            "errors" => $validator->errors()
+            "data" => [
+                "success" => false,
+                "message" => $validator->errors()->first()
+            ]
         ], Response::HTTP_BAD_REQUEST));
     }
 }
